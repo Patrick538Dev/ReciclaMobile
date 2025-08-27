@@ -1,6 +1,6 @@
 import React from "react";
 import { SafeAreaView, StatusBar } from "react-native";
-import LoginScreen from "./src/views/LoginScreen.tsx";
+import LoginScreen from "../ReciclaMobile/src/views/LoginScreen";
 
 export default function App() {
   return (
