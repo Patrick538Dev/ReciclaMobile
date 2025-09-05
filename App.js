@@ -1,6 +1,6 @@
 import React from "react";
 import { SafeAreaView, StatusBar } from "react-native";
-import LoginScreen from "../ReciclaMobile/src/views/LoginScreen";
+import LoginScreen from "../ReciclaMobile/src/views/MainMenuScreen";
 
 export default function App() {
   return (

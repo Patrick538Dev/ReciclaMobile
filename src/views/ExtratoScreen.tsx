@@ -1,22 +1,21 @@
-// src/views/ExtratoScreen.js
-import React from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import ExtratoViewModel from "../viewmodels/ExtratoViewModel";
+import React from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function ExtratoScreen({ navigation }) {
+import ExtratoViewModel from '../models/ExtratoModel';
+
+export default function ExtratoScreen({ navigation }: any) {
   const viewModel = new ExtratoViewModel();
   const itens = viewModel.getItens();
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: any) => (
     <View style={styles.card}>
-      <Ionicons name="checkmark-circle" size={24} color="#ccc" />
       <View style={styles.info}>
         <Text style={styles.tipo}>{item.tipo}</Text>
         <Text style={styles.quantidade}>{item.quantidade}</Text>
       </View>
       <View style={styles.detalhes}>
-        <Text style={styles.valor}>{item.valor}</Text>
+        <Text style={styles.valor}>R$ {item.valor},00</Text>
         <Text style={styles.data}>{item.data}</Text>
       </View>
     </View>
@@ -26,23 +25,22 @@ export default function ExtratoScreen({ navigation }) {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
-
-        <Image source={require("../../assets/logo.png")} style={styles.logo} />
+        <Image source={require('../../assets/logo.png')} style={styles.logo} />
         <View style={{ marginLeft: 8 }}>
           <Text style={styles.headerTitle}>Recicla Fácil</Text>
           <Text style={styles.headerSubtitle}>Histórico de Atividades</Text>
         </View>
       </View>
 
-      {/* Lista */}
       <FlatList
         data={itens}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-        contentContainerStyle={styles.listContainer} // <-- ajuste aqui
+        contentContainerStyle={styles.listContainer}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -51,13 +49,13 @@ export default function ExtratoScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1B5E20",
+    backgroundColor: '#1B5E20',
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 15,
-    backgroundColor: "#1B5E20",
+    backgroundColor: '#1B5E20',
     marginTop: 45,
   },
   backButton: {
@@ -66,25 +64,25 @@ const styles = StyleSheet.create({
   logo: {
     width: 40,
     height: 40,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   headerTitle: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   headerSubtitle: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 14,
   },
   listContainer: {
     padding: 20,
-    marginTop: 35, // <-- ajuste de espaço entre header e lista
+    marginTop: 35,
   },
   card: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#3C6E47",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#3C6E47',
     borderRadius: 12,
     padding: 15,
     marginVertical: 8,
@@ -95,23 +93,23 @@ const styles = StyleSheet.create({
   },
   tipo: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#fff",
+    fontWeight: 'bold',
+    color: '#fff',
   },
   quantidade: {
     fontSize: 14,
-    color: "#ddd",
+    color: '#ddd',
   },
   detalhes: {
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
   },
   valor: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#fff",
+    fontWeight: 'bold',
+    color: '#fff',
   },
   data: {
     fontSize: 13,
-    color: "#ddd",
+    color: '#ddd',
   },
 });
