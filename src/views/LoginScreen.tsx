@@ -1,144 +1,134 @@
 // src/views/LoginScreen.tsx
-import React from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ActivityIndicator,
-  Image,
-} from "react-native";
-import { useLoginViewModel } from "../viewsmodels/LoginViewsModel";
 
-export default function LoginScreen() {
-  const {
-    user,
-    setEmail,
-    setPassword,
-    loading,
-    error,
-    handleLogin,
-    handleRegister,
-    handleForgotPassword,
-  } = useLoginViewModel();
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
+
+export default function LoginScreen({ navigation }: any) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Substitua por sua lógica real
+  const handleLogin = () => {
+    // Exemplo simples de navegação após login
+    navigation.replace("MainMenu");
+  };
+  
+  const handleForgotPassword = () => {
+    // Navegar para a tela de recuperação de senha, se existir
+  };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      {/* Container da logo e do título */}
+    <View style={styles.container}>
       <View style={styles.logoTitleContainer}>
-        {/* Logo */}
-        <Image
-          source={require("../../assets/logo.png")}
-          style={styles.logoSmall} // tamanho ajustado para caber ao lado do texto
-          resizeMode="contain"
-        />
-
-        {/* Título */}
-        <Text style={styles.title}>Recicla Fácil</Text>
+        <View style={styles.logoBox}>
+          <Image source={require("../../assets/logo.png")} style={styles.logo} />
+        </View>
+        <Text style={styles.title}>Planeta Verde</Text>
       </View>
 
-      {/* Campo de Email com rótulo */}
-      <View style={{ width: "80%", marginBottom: 15, alignSelf: "center" }}>
-        <Text style={{ color: "#fff", marginBottom: 5, fontSize: 14, textAlign: "left" }}>
-          E-mail
-        </Text>
+      <View style={styles.formContainer}>
+        <Text style={styles.label}>Email</Text>
         <TextInput
-          style={[styles.input, { width: "100%" }]} // largura do input ajustada
-          placeholder="seu@email.com.br"
-          value={user.email}
-          onChangeText={setEmail}
+          style={styles.input}
+          placeholder="seu@email.com"
+          placeholderTextColor="#b2b2b2"
           keyboardType="email-address"
           autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
         />
-      </View>
 
-      {/* Campo de Senha com rótulo */}
-      <View style={{ width: "80%", marginBottom: 15, alignSelf: "center" }}>
-        <Text style={{ color: "#fff", marginBottom: 5, fontSize: 14, textAlign: "left" }}>
-          Senha
-        </Text>
+        <Text style={styles.label}>Password</Text>
         <TextInput
-          style={[styles.input, { width: "100%" }]}
-          placeholder="*********"
-          value={user.password}
-          onChangeText={setPassword}
+          style={styles.input}
+          placeholder="••••••••"
+          placeholderTextColor="#b2b2b2"
           secureTextEntry
+          value={password}
+          onChangeText={setPassword}
         />
-      </View>
 
-      {/* Mensagem de erro */}
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-
-      {/* Botão de Login */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleLogin}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#1B5E20" />
-        ) : (
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Entrar</Text>
-        )}
-      </TouchableOpacity>
+        </TouchableOpacity>
 
-      {/* Registrar */}
-      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-        <Text style={styles.registerText}>Criar conta</Text>
-      </TouchableOpacity>
-
-      {/* Esqueceu a senha */}
-      <TouchableOpacity onPress={handleForgotPassword}>
-        <Text style={styles.forgotText}>Esqueceu a senha?</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
+        <TouchableOpacity onPress={handleForgotPassword}>
+          <Text style={styles.forgotPassword}>Forgot password?</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#1B5E20",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#1B5E20",
     paddingHorizontal: 20,
   },
   logoTitleContainer: {
-    flexDirection: "row", // coloca logo e título lado a lado
-    alignItems: "center", // alinha verticalmente
-    marginBottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 40,
   },
-  logoSmall: {
-    width: 60,
-    height: 60,
-    marginRight: 10, // espaço entre logo e título
+  logoBox: {
+    width: 56,
+    height: 56,
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 24,
+    borderBottomLeftRadius: 24,
+    borderTopRightRadius: 24,
+    borderBottomRightRadius: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    marginRight: 12,
   },
-  title: { color: "#fff", fontSize: 24, fontWeight: "bold" },
+  logo: {
+    width: 40,
+    height: 40,
+  },
+  title: {
+    color: "#fff",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  formContainer: {
+    width: "100%",
+  },
+  label: {
+    color: "#fff",
+    fontSize: 16,
+    marginBottom: 4,
+    marginTop: 12,
+    fontWeight: "500",
+  },
   input: {
     backgroundColor: "#fff",
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 15,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     fontSize: 16,
-    width: "100%", // largura agora 100% do container
+    marginBottom: 12,
   },
   button: {
     backgroundColor: "#fff",
+    borderRadius: 8,
     paddingVertical: 14,
-    borderRadius: 10,
-    marginBottom: 10,
+    marginTop: 10,
     alignItems: "center",
-    width: "80%",
   },
-  buttonText: { color: "#1B5E20", fontSize: 16, fontWeight: "bold" },
-  registerButton: { paddingVertical: 12, alignItems: "center", marginBottom: 10 },
-  registerText: { color: "#fff", fontSize: 16, fontWeight: "600" },
-  forgotText: { color: "#BDBDBD", fontSize: 14, textAlign: "center", marginTop: 5 },
-  error: { color: "red", textAlign: "center", marginBottom: 10 },
+  buttonText: {
+    color: "#2E6136",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  forgotPassword: {
+    color: "#b2b2b2",
+    marginTop: 12,
+    textDecorationLine: "underline",
+    textAlign: "center",
+  },
 });
