@@ -2,19 +2,20 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const ConfirmWasteScreen: React.FC = () => {
+const ConfirmWasteScreen = () => {
   return (
     <View style={styles.container}>
-      <Ionicons
-        name="checkmark-circle-outline"
-        size={90}
-        color="#fff"
-        style={styles.iconContainer}
-      />
+      <View style={styles.iconBox}>
+        <Ionicons
+          name="checkmark-circle"
+          size={82}
+          color="#fff"
+        />
+      </View>
       <Text style={styles.title}>Resíduo Cadastrado!</Text>
       <View style={styles.infoCard}>
-        <Text style={styles.infoText}>kg</Text>
-        <Text style={styles.infoText}>+R$</Text>
+        <Text style={styles.infoKg}>kg</Text>
+        <Text style={styles.infoValue}>+R$</Text>
       </View>
       <Text style={styles.subtitle}>Parabéns, você contribuiu para um mundo mais sustentável!</Text>
       <TouchableOpacity style={styles.primaryButton}>
@@ -30,66 +31,85 @@ const ConfirmWasteScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1B5E20',
+    backgroundColor: '#276846',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 12,
   },
-  iconContainer: {
-    marginBottom: 20,
+  iconBox: {
+    marginBottom: 14,
+    marginTop: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 22,
-    color: '#fff',
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  infoCard: {
-    backgroundColor: '#336E4C',
-    borderRadius: 12,
-    paddingVertical: 25,
-    paddingHorizontal: 40,
-    marginBottom: 20,
-    width: '80%',
-    alignItems: 'center',
-  },
-  infoText: {
     fontSize: 20,
     color: '#fff',
-    marginBottom: 5,
-    fontWeight: '500',
+    fontWeight: 'bold',
+    marginBottom: 22,
+    textAlign: 'center',
+    letterSpacing: 0.2,
+  },
+  infoCard: {
+    backgroundColor: '#6da486',
+    borderRadius: 15,
+    width: '78%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 30,
+    marginBottom: 13,
+  },
+  infoKg: {
+    fontSize: 20,
+    color: '#fff',
+    marginBottom: 8,
+    fontWeight: '600',
+    letterSpacing: 0.2,
+  },
+  infoValue: {
+    fontSize: 20,
+    color: '#fff',
+    fontWeight: '600',
+    letterSpacing: 0.2,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#fff',
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 36,
+    marginTop: 4,
+    fontWeight: '500',
+    lineHeight: 18,
+    opacity: 0.94,
   },
   primaryButton: {
     backgroundColor: '#fff',
-    paddingVertical: 14,
-    paddingHorizontal: 30,
-    borderRadius: 8,
-    marginBottom: 15,
-    width: '80%',
+    paddingVertical: 12,
+    borderRadius: 10,
+    width: '78%',
     alignItems: 'center',
+    marginBottom: 16,
+    elevation: 2,
   },
   primaryText: {
-    color: '#1B5E20',
-    fontSize: 16,
+    color: '#276846',
     fontWeight: 'bold',
+    fontSize: 16,
+    letterSpacing: 0.1,
   },
   secondaryButton: {
-    borderWidth: 1,
-    borderColor: '#2E7D32',
-    paddingVertical: 14,
-    borderRadius: 8,
-    width: '80%',
+    borderWidth: 1.5,
+    borderColor: '#5b7c6e',
+    paddingVertical: 12,
+    borderRadius: 10,
+    width: '78%',
     alignItems: 'center',
+    marginBottom: 0,
   },
   secondaryText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: '500',
   },
 });
 

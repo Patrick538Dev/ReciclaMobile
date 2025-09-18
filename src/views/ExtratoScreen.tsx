@@ -8,22 +8,22 @@ export default function ExtratoScreen({ navigation }) {
   const viewModel = new ExtratoViewModel();
   const itens = viewModel.getItens();
 
-  // Lógica para exibir o ícone/status do item (i, check)
-  const getIconData = (item) => {
-    // Exemplo: Se tipo for Plástico, mostra erro, senão ok
-    if (item.tipo.toLowerCase() === "plástico") {
-      return { name: "information-circle", color: "#a12b22", bg: "#f5f4f6" };
-    } else {
-      return { name: "checkmark-circle", color: "#5b7c6e", bg: "#e2ede6" };
+  // Retorna o ícone e cor para cada item dependendo da validação
+  const getIconData = (index) => {
+    if (index === 0) {
+      // Primeiro item com alerta
+      return { name: 'alert-circle', color: '#a12b22', bg: '#f5f4f6' };
     }
+    // Outros com check verde
+    return { name: 'checkmark-circle', color: '#5b7c6e', bg: '#e2ede6' };
   };
 
-  const renderItem = ({ item }) => {
-    const iconData = getIconData(item);
+  const renderItem = ({ item, index }) => {
+    const iconData = getIconData(index);
 
     return (
       <View style={styles.card}>
-        <View style={[styles.iconCircle, { backgroundColor: iconData.bg || "#eaeaea" }]}>
+        <View style={[styles.iconCircle, { backgroundColor: iconData.bg || '#eaeaea' }]}>
           <Ionicons
             name={iconData.name}
             size={28}
@@ -35,9 +35,7 @@ export default function ExtratoScreen({ navigation }) {
           <Text style={styles.quantidade}>{item.quantidade}</Text>
         </View>
         <View style={styles.detailsArea}>
-          <Text style={styles.valor}>
-            {`R$ ${parseFloat(item.valor).toFixed(2).replace('.', ',')}`}
-          </Text>
+          <Text style={styles.valor}>{`R$ ${parseFloat(item.valor).toFixed(2).replace('.', ',')}`}</Text>
           <Text style={styles.data}>{item.data}</Text>
         </View>
       </View>
@@ -96,7 +94,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 8,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     marginLeft: 6,
     marginRight: 3,
   },
