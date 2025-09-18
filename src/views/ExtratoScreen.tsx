@@ -2,24 +2,47 @@ import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import ExtratoViewModel from '../models/ExtratoModel';
+import ExtratoViewModel from '../viewsmodels/ExtratoViewModel';
 
-export default function ExtratoScreen({ navigation }: any) {
+export default function ExtratoScreen({ navigation }) {
   const viewModel = new ExtratoViewModel();
   const itens = viewModel.getItens();
 
-  const renderItem = ({ item }: any) => (
-    <View style={styles.card}>
-      <View style={styles.info}>
-        <Text style={styles.tipo}>{item.tipo}</Text>
-        <Text style={styles.quantidade}>{item.quantidade}</Text>
+  // Lógica para exibir o ícone/status do item (i, check)
+  const getIconData = (item) => {
+    // Exemplo: Se tipo for Plástico, mostra erro, senão ok
+    if (item.tipo.toLowerCase() === "plástico") {
+      return { name: "information-circle", color: "#a12b22", bg: "#f5f4f6" };
+    } else {
+      return { name: "checkmark-circle", color: "#5b7c6e", bg: "#e2ede6" };
+    }
+  };
+
+  const renderItem = ({ item }) => {
+    const iconData = getIconData(item);
+
+    return (
+      <View style={styles.card}>
+        <View style={[styles.iconCircle, { backgroundColor: iconData.bg || "#eaeaea" }]}>
+          <Ionicons
+            name={iconData.name}
+            size={28}
+            color={iconData.color}
+          />
+        </View>
+        <View style={styles.infoArea}>
+          <Text style={styles.tipo}>{item.tipo}</Text>
+          <Text style={styles.quantidade}>{item.quantidade}</Text>
+        </View>
+        <View style={styles.detailsArea}>
+          <Text style={styles.valor}>
+            {`R$ ${parseFloat(item.valor).toFixed(2).replace('.', ',')}`}
+          </Text>
+          <Text style={styles.data}>{item.data}</Text>
+        </View>
       </View>
-      <View style={styles.detalhes}>
-        <Text style={styles.valor}>R$ {item.valor},00</Text>
-        <Text style={styles.data}>{item.data}</Text>
-      </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -30,9 +53,12 @@ export default function ExtratoScreen({ navigation }: any) {
         </TouchableOpacity>
         <Image source={require('../../assets/logo.png')} style={styles.logo} />
         <View style={{ marginLeft: 8 }}>
-          <Text style={styles.headerTitle}>Recicla Fácil</Text>
-          <Text style={styles.headerSubtitle}>Histórico de Atividades</Text>
+          <Text style={styles.headerTitle}>Planeta Verde</Text>
+          <Text style={styles.headerSubtitle}>Histórico de atividades</Text>
         </View>
+        <TouchableOpacity style={styles.menuButton} onPress={() => navigation.navigate('Menu')}>
+          <Ionicons name="menu-outline" size={28} color="#fff" />
+        </TouchableOpacity>
       </View>
 
       <FlatList
@@ -49,59 +75,84 @@ export default function ExtratoScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1B5E20',
+    backgroundColor: '#276846',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-    backgroundColor: '#1B5E20',
-    marginTop: 45,
+    paddingHorizontal: 16,
+    paddingTop: 38,
+    paddingBottom: 10,
   },
   backButton: {
-    marginRight: 12,
+    marginRight: 5,
+    padding: 3,
+  },
+  menuButton: {
+    marginLeft: 'auto',
+    padding: 3,
   },
   logo: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain',
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    marginLeft: 6,
+    marginRight: 3,
   },
   headerTitle: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '700',
+    letterSpacing: 0.2,
   },
   headerSubtitle: {
-    color: '#fff',
-    fontSize: 14,
+    color: '#bbd9c6',
+    fontSize: 13,
+    marginTop: 1,
+    fontWeight: '500',
+    letterSpacing: 0.1,
   },
   listContainer: {
-    padding: 20,
-    marginTop: 35,
+    paddingVertical: 16,
+    paddingHorizontal: 15,
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#3C6E47',
-    borderRadius: 12,
-    padding: 15,
-    marginVertical: 8,
+    backgroundColor: '#6da486',
+    borderRadius: 24,
+    marginVertical: 13,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    elevation: 3,
   },
-  info: {
+  iconCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  infoArea: {
     flex: 1,
-    marginLeft: 10,
+    justifyContent: 'center',
+  },
+  detailsArea: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
   },
   tipo: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
+    marginBottom: 2,
   },
   quantidade: {
     fontSize: 14,
-    color: '#ddd',
-  },
-  detalhes: {
-    alignItems: 'flex-end',
+    color: '#e2ede6',
+    fontWeight: '500',
   },
   valor: {
     fontSize: 16,
@@ -109,7 +160,9 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   data: {
-    fontSize: 13,
-    color: '#ddd',
+    fontSize: 14,
+    color: '#e2ede6',
+    fontWeight: '500',
+    marginTop: 2,
   },
 });

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Picker } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function RegisterScreen() {
@@ -10,7 +11,6 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
   const logo = require("../../assets/logo.png");
 
   return (
@@ -24,71 +24,97 @@ export default function RegisterScreen() {
         </View>
       </View>
 
-      {/* Campos do formulário */}
-      <TextInput
-        style={styles.input}
-        placeholder="Seu Nome Aqui"
-        placeholderTextColor="#BDBDBD"
-        value={nome}
-        onChangeText={setNome}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="999999-9"
-        placeholderTextColor="#BDBDBD"
-        value={matricula}
-        onChangeText={setMatricula}
-      />
-      {/* Picker do centro educacional */}
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={centro}
-          style={styles.picker}
-          onValueChange={itemValue => setCentro(itemValue)}
-        >
-          <Picker.Item label="Selecione a escola" value="" />
-          <Picker.Item label="Centro 1" value="Centro 1" />
-          <Picker.Item label="Centro 2" value="Centro 2" />
-        </Picker>
+      {/* Nome Completo */}
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>Nome Completo</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Seu Nome Aqui"
+          placeholderTextColor="#BDBDBD"
+          value={nome}
+          onChangeText={setNome}
+        />
       </View>
-      <TextInput
-        style={styles.input}
-        placeholder="(99) 9999-9999"
-        placeholderTextColor="#BDBDBD"
-        value={telefone}
-        onChangeText={setTelefone}
-        keyboardType="phone-pad"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="seu@email.com"
-        placeholderTextColor="#BDBDBD"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
 
-      <TextInput
-        style={styles.input}
-        placeholder="************"
-        placeholderTextColor="#BDBDBD"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={!showPassword}
-      />
+      {/* Matrícula */}
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>Matrícula</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="999999-9"
+          placeholderTextColor="#BDBDBD"
+          value={matricula}
+          onChangeText={setMatricula}
+        />
+      </View>
+      
+      {/* Centro Educacional */}
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>Centro Educacional</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={centro}
+            style={styles.picker}
+            onValueChange={(itemValue) => setCentro(itemValue)}
+          >
+            <Picker.Item label="Selecione a escola" value="" />
+            <Picker.Item label="Centro 1" value="Centro 1" />
+            <Picker.Item label="Centro 2" value="Centro 2" />
+          </Picker>
+        </View>
+      </View>
 
-      {/* Mostrar senha */}
-      <View style={styles.showPasswordRow}>
-        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-          <Ionicons
-            name={showPassword ? "checkbox" : "square-outline"}
-            size={22}
-            color="#1B5E20"
-            style={{ marginRight: 6 }}
-          />
-        </TouchableOpacity>
-        <Text style={styles.showPasswordText}>Mostrar Senha</Text>
+      {/* Telefone */}
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>Telefone</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="(99) 9999-9999"
+          placeholderTextColor="#BDBDBD"
+          value={telefone}
+          onChangeText={setTelefone}
+          keyboardType="phone-pad"
+        />
+      </View>
+
+      {/* Email */}
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="seu@email.com"
+          placeholderTextColor="#BDBDBD"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+      </View>
+
+      {/* Senha */}
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>Password</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="************"
+          placeholderTextColor="#BDBDBD"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+        />
+
+        {/* Mostrar senha */}
+        <View style={styles.showPasswordRow}>
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <Ionicons
+              name={showPassword ? "checkbox" : "square-outline"}
+              size={22}
+              color="#1B5E20"
+              style={{ marginRight: 6 }}
+            />
+          </TouchableOpacity>
+          <Text style={styles.showPasswordText}>Mostrar Senha</Text>
+        </View>
       </View>
 
       {/* Botão Registrar */}
@@ -132,6 +158,17 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     opacity: 0.85,
   },
+  fieldContainer: {
+    width: "100%",
+    marginBottom: 8,
+  },
+  label: {
+    color: "#fff",
+    fontSize: 15,
+    marginBottom: 2,
+    marginLeft: 2,
+    fontWeight: "500",
+  },
   input: {
     width: "100%",
     backgroundColor: "#fff",
@@ -139,23 +176,24 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     fontSize: 15,
-    marginBottom: 13,
+    marginBottom: 2,
   },
   pickerContainer: {
     width: "100%",
     backgroundColor: "#fff",
     borderRadius: 8,
-    marginBottom: 13,
+    marginBottom: 2,
     overflow: "hidden",
   },
   picker: {
     width: "100%",
-    height: 42,
+    height: 50,
   },
   showPasswordRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 13,
+    marginTop: 5,
+    marginBottom: 8,
     alignSelf: "flex-start",
   },
   showPasswordText: {
@@ -168,12 +206,11 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     alignItems: "center",
     marginTop: 12,
-    marginBottom: 12,
     width: "100%",
   },
   buttonText: {
     color: "#1B5E20",
     fontWeight: "bold",
     fontSize: 16,
-  }
+  },
 });
