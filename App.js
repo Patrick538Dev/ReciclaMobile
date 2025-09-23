@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import WelcomeScreen from "./src/views/WelcomeScreen";
 import LoginScreen from "./src/views/LoginScreen";
+import LoginScreen2 from "./src/views/LoginScreen2";
 import RegisterScreenAluno from "./src/views/RegisterScreenAluno"; // Importação correta do arquivo
 import SaldoScreen from "./src/views/SaldoScreen";
 import ExtratoScreen from "./src/views/ExtratoScreen";
@@ -18,9 +19,10 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="Logine" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Logine" component={LoginScreen2} />
         <Stack.Screen name="RegisterAluno" component={RegisterScreenAluno} />
         <Stack.Screen name="Saldo" component={SaldoScreen} />
         <Stack.Screen name="Extrato" component={ExtratoScreen} />
