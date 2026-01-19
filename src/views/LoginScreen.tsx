@@ -1,134 +1,218 @@
-// src/views/LoginScreen.tsx
+// src/screens/LoginScreen.tsx
+import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StatusBar,
+} from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
+// mesmo names usados no App.js
+type RootStackParamList = {
+  Welcome: undefined;
+  Login: undefined;
+  RegisterAluno: undefined;
+  Saldo: undefined;      // <- adiciona a rota de saldo
+  // outras telas se quiser
+};
 
-export default function LoginScreen({ navigation }: any) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
-  // Substitua por sua lógica real
+const LoginScreen: React.FC<Props> = ({ navigation }) => {
+  const [email, setEmail] = React.useState('');
+  const [senha, setSenha] = React.useState('');
+
+  const isButtonDisabled = !email || !senha;
+
   const handleLogin = () => {
-    // Exemplo simples de navegação após login
-    navigation.replace("MainMenu");
-  };
-  
-  const handleForgotPassword = () => {
-    // Navegar para a tela de recuperação de senha, se existir
+    // aqui você pode colocar validação/autenticação depois
+    navigation.navigate('Saldo');
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.logoTitleContainer}>
-        <View style={styles.logoBox}>
-          <Image source={require("../../assets/logo.png")} style={styles.logo} />
+      <StatusBar barStyle="light-content" />
+      <KeyboardAvoidingView
+        style={styles.keyboardContainer}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <View style={styles.content}>
+          {/* Logo centralizado */}
+          <View style={styles.logoContainer}>
+            <View style={styles.logoWrapper}>
+              <Image
+                source={require('../../assets/logo.png')}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+            </View>
+          </View>
+
+          {/* Título */}
+          <Text style={styles.title}>Faça seu login!</Text>
+
+          {/* Campo Email */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="usuario@email.com"
+              placeholderTextColor="#C7C7CD"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
+
+          {/* Campo Senha */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>Senha</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="********"
+              placeholderTextColor="#C7C7CD"
+              value={senha}
+              onChangeText={setSenha}
+              secureTextEntry
+            />
+          </View>
+
+          {/* Botão Entrar */}
+          <TouchableOpacity
+            style={[
+              styles.button,
+              isButtonDisabled && styles.buttonDisabled,
+            ]}
+            activeOpacity={0.7}
+            disabled={isButtonDisabled}
+            onPress={handleLogin}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                isButtonDisabled && styles.buttonTextDisabled,
+              ]}
+            >
+              Entrar
+            </Text>
+          </TouchableOpacity>
+
+          {/* Texto cadastro */}
+          <Text style={styles.subText}>Ou realize seu cadastro</Text>
+
+          {/* Botão Criar nova conta */}
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('RegisterAluno')}
+          >
+            <Text style={styles.secondaryButtonText}>Criar nova conta</Text>
+          </TouchableOpacity>
         </View>
-        <Text style={styles.title}>Planeta Verde</Text>
-      </View>
-
-      <View style={styles.formContainer}>
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="seu@email.com"
-          placeholderTextColor="#b2b2b2"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-        />
-
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="••••••••"
-          placeholderTextColor="#b2b2b2"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={handleForgotPassword}>
-          <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
-        </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
-}
+};
+
+const GREEN_BACKGROUND = '#12B24E';
+const GREEN_DARK = '#0C7F38';
+const WHITE = '#FFFFFF';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1B5E20",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
+    backgroundColor: GREEN_BACKGROUND,
   },
-  logoTitleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 40,
+  keyboardContainer: {
+    flex: 1,
   },
-  logoBox: {
-    width: 56,
-    height: 56,
-    backgroundColor: "#fff",
-    borderTopLeftRadius: 24,
-    borderBottomLeftRadius: 24,
-    borderTopRightRadius: 24,
-    borderBottomRightRadius: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
-    marginRight: 12,
+  content: {
+    flex: 1,
+    paddingHorizontal: 28,
+    justifyContent: 'center',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  logoWrapper: {
+    width: 120,
+    height: 120,
+    borderRadius: 24,
+    backgroundColor: GREEN_DARK,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logo: {
-    width: 40,
-    height: 40,
+    width: 80,
+    height: 80,
   },
   title: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
+    marginTop: 16,
+    textAlign: 'center',
+    fontSize: 28,
+    fontWeight: '700',
+    color: WHITE,
   },
-  formContainer: {
-    width: "100%",
+  fieldContainer: {
+    marginTop: 22,
   },
   label: {
-    color: "#fff",
+    color: WHITE,
     fontSize: 16,
-    marginBottom: 4,
-    marginTop: 12,
-    fontWeight: "500",
+    marginBottom: 6,
   },
   input: {
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    backgroundColor: WHITE,
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
     fontSize: 16,
-    marginBottom: 12,
   },
   button: {
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    paddingVertical: 14,
-    marginTop: 10,
-    alignItems: "center",
+    marginTop: 26,
+    borderRadius: 10,
+    paddingVertical: 16,
+    alignItems: 'center',
+    backgroundColor: GREEN_DARK,
+  },
+  buttonDisabled: {
+    backgroundColor: '#A4D8B5',
   },
   buttonText: {
-    color: "#2E6136",
+    color: WHITE,
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: '600',
   },
-  forgotPassword: {
-    color: "#b2b2b2",
-    marginTop: 12,
-    textDecorationLine: "underline",
-    textAlign: "center",
+  buttonTextDisabled: {
+    color: '#5F8F6B',
+  },
+  subText: {
+    marginTop: 26,
+    textAlign: 'center',
+    color: WHITE,
+    fontSize: 15,
+  },
+  secondaryButton: {
+    marginTop: 16,
+    paddingVertical: 14,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: WHITE,
+    alignItems: 'center',
+  },
+  secondaryButtonText: {
+    color: WHITE,
+    fontSize: 17,
+    fontWeight: '500',
   },
 });
+
+export default LoginScreen;

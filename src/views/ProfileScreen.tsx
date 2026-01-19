@@ -1,146 +1,161 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const ProfileScreen: React.FC = () => {
-  const logo = require('../../assets/logo.png');
-  const avatar = require('../../assets/avatar-placeholder.png');
-
+const ProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      {/* Header */}
+      {/* Header simples com Voltar */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => { /* ação voltar */ }}>
+        <TouchableOpacity
+          style={styles.backRow}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Image source={logo} style={styles.smallLogo} />
-        <View style={{ marginLeft: 8 }}>
-          <Text style={styles.headerTitle}>Recicla Fácil</Text>
-          <Text style={styles.headerSubtitle}>Perfil</Text>
-        </View>
-        <TouchableOpacity style={styles.menuButton}>
-          <Ionicons name="menu" size={28} color="#fff" />
+          <Text style={styles.backText}>Voltar</Text>
         </TouchableOpacity>
       </View>
-      <View style={{ height: 34 }} />
-      <View style={styles.avatarRow}>
-        <Image source={avatar} style={styles.avatar} />
-        <View style={{ marginLeft: 18 }}>
-          <Text style={styles.userName}>Nome de Usuário</Text>
-          <Text style={styles.userEmail}>usuario@email.com.br</Text>
+
+      {/* Avatar grande */}
+      <View style={styles.avatarWrapper}>
+        <View style={styles.avatarCircleOuter}>
+          <View style={styles.avatarCircleInner}>
+            <Ionicons name="person" size={40} color="#12B24E" />
+          </View>
         </View>
+        <Text style={styles.userName}>Nome do Usuário</Text>
+        <Text style={styles.userEmail}>sousapatrick538@gmail.com</Text>
       </View>
-      <TouchableOpacity style={styles.button}>
+
+      {/* Botões */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('EditProfile')}
+      >
         <Ionicons
           name="pencil"
           size={22}
-          color="#316241"
+          color="#12B24E"
           style={styles.leftIcon}
         />
-        <Text style={styles.buttonText}>Editar Perfil</Text>
+        <Text style={styles.buttonText}>Editar dados</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+
+      {/* Central de segurança -> SecurityCenterScreen */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('SecurityCenter')}
+      >
+        <Ionicons
+          name="shield-checkmark-outline"
+          size={22}
+          color="#12B24E"
+          style={styles.leftIcon}
+        />
+        <Text style={styles.buttonText}>Central de segurança</Text>
+      </TouchableOpacity>
+
+      {/* Instagram -> FollowInstagramScreen */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('FollowInstagram')}
+      >
         <Ionicons
           name="logo-instagram"
           size={22}
-          color="#316241"
+          color="#12B24E"
           style={styles.leftIcon}
         />
-        <Text style={styles.buttonText}>Conectar Instagram</Text>
+        <Text style={styles.buttonText}>Instagram</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+
+      {/* Sair -> LoginScreen */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('Login')}
+      >
         <Text style={styles.buttonText}>Sair</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-const COLOR_BG = '#316241';
-const COLOR_BTN = '#fff';
-const COLOR_BTN_TEXT = '#316241';
-const COLOR_TITLE = '#fff';
-const COLOR_SUBTITLE = '#d6eedb';
+const GREEN_BACKGROUND = '#12B24E';
+const WHITE = '#FFFFFF';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLOR_BG,
-    alignItems: 'center',
-    paddingTop: 48,
+    backgroundColor: GREEN_BACKGROUND,
+    paddingTop: 40,
     paddingHorizontal: 20,
   },
+
+  /* Header Voltar */
   header: {
-    width: '100%',
+    marginBottom: 30,
+  },
+  backRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backText: {
+    color: WHITE,
+    fontSize: 20,
+    marginLeft: 8,
+  },
+
+  /* Avatar e informações */
+  avatarWrapper: {
+    alignItems: 'center',
+    marginTop: 30,
+    marginBottom: 26,
+  },
+  avatarCircleOuter: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 6,
+    borderColor: WHITE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 14,
+  },
+  avatarCircleInner: {
+    width: 84,
+    height: 84,
+    borderRadius: 42,
+    backgroundColor: WHITE,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  userName: {
+    color: WHITE,
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  userEmail: {
+    color: WHITE,
+    fontSize: 16,
+  },
+
+  /* Botões */
+  button: {
+    backgroundColor: WHITE,
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
   },
-  backButton: {
-    paddingRight: 10,
-    paddingVertical: 4,
-  },
-  smallLogo: {
-    width: 28,
-    height: 28,
-    borderRadius: 6,
-    marginLeft: 2,
-  },
-  headerTitle: {
-    color: COLOR_TITLE,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  headerSubtitle: {
-    color: COLOR_SUBTITLE,
-    fontSize: 13,
-    marginTop: 2,
-  },
-  menuButton: {
-    marginLeft: 'auto',
-    marginRight: 0,
-    padding: 8,
-  },
-  avatarRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 8,
-    width: '100%',
-    justifyContent: 'center',
-  },
-  avatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: '#e9e9e9',
-  },
-  userName: {
-    color: COLOR_TITLE,
-    fontWeight: 'bold',
-    fontSize: 17,
-    marginBottom: 3,
-  },
-  userEmail: {
-    color: COLOR_SUBTITLE,
-    fontSize: 14,
-  },
-  button: {
-    width: '90%',
-    backgroundColor: COLOR_BTN,
-    borderRadius: 8,
-    paddingVertical: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginVertical: 7,
-    justifyContent: 'center',
-  },
   leftIcon: {
-    marginRight: 14,
+    marginRight: 12,
   },
   buttonText: {
-    color: COLOR_BTN_TEXT,
-    fontSize: 16,
+    color: GREEN_BACKGROUND,
+    fontSize: 18,
     fontWeight: '600',
   },
 });

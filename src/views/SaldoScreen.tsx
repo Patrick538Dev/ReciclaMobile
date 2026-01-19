@@ -1,202 +1,255 @@
 import React from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSaldoViewModel } from "../viewsmodels/SaldoViewModel";
 
 export default function SaldoScreen({ navigation }) {
-  const { saldo, getItens } = useSaldoViewModel();
-  const movimentos = getItens();
+  const { saldo } = useSaldoViewModel();
 
-  // Demo para dividir saldo entre resgatável e pendente
-  const saldoResgate = 20.0;
-  const saldoPendente = 10.0;
-
-  // Função para ícone, vermelho se pendente, verde se aprovado
-  const getIconData = (item, idx) => {
-    if (idx === 0) {
-      return { name: "alert-circle", color: "#a12b22" };
-    }
-    return { name: "checkmark-circle", color: "#607e6a" };
-  };
-
-  const renderItem = ({ item, index }) => {
-    const iconData = getIconData(item, index);
-    return (
-      <View style={styles.movimentoRow}>
-        <Ionicons
-          name={iconData.name}
-          size={18}
-          color={iconData.color}
-          style={{ marginRight: 8 }}
-        />
-        <Text style={styles.movimentoTexto}>{`R$ ${parseFloat(item.valor).toFixed(2).replace(".", ",")}`}</Text>
-        <View style={{ flex: 1 }} />
-        <Text style={styles.movimentoData}>{item.data}</Text>
-      </View>
-    );
-  };
+  const saldoResgate = 0.0;
+  const saldoPendente = 0.0;
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={28} color="#fff" />
-        </TouchableOpacity>
-        <Image source={require("../../assets/logo.png")} style={styles.logo} />
-        <View style={{ marginLeft: 8 }}>
-          <Text style={styles.headerTitle}>Planeta Verde</Text>
-          <Text style={styles.headerSubtitle}>Saldo</Text>
+        <View style={styles.headerLeft}>
+          <View style={styles.headerLogoWrapper}>
+            <Image
+              source={require("../../assets/logo.png")}
+              style={styles.headerLogo}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={styles.headerTextWrapper}>
+            <Text style={styles.headerTitle}>Planeta Verde</Text>
+            <Text style={styles.headerSubtitle}>Saldo</Text>
+          </View>
         </View>
-        <TouchableOpacity style={styles.menuButton} onPress={() => navigation.navigate('Menu')}>
-          <Ionicons name="menu-outline" size={28} color="#fff" />
+
+        <TouchableOpacity
+          style={styles.profileButton}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          <View style={styles.profileCircle}>
+            <Ionicons name="person" size={26} color="#fff" />
+          </View>
         </TouchableOpacity>
       </View>
 
-      {/* Saldo label */}
-      <Text style={styles.saldoInfo}>Seu saldo para resgate</Text>
-      <Text style={styles.saldoResgate}>
-        R$ {saldoResgate.toFixed(2).replace(".", ",")}
-      </Text>
-      <Text style={styles.saldoInfo}>Saldo Pendente de Aprovação</Text>
-      <Text style={styles.saldoPendente}>
-        R$ {saldoPendente.toFixed(2).replace(".", ",")}
-      </Text>
+      {/* Saldo principal */}
+      <View style={styles.content}>
+        <Text style={styles.saldoInfo}>Seu saldo para resgate</Text>
+        <Text style={styles.saldoResgate}>
+          R$ {saldoResgate.toFixed(2).replace(".", ",")}
+        </Text>
 
-      {/* Movimentações */}
-      <FlatList
-        data={movimentos}
-        renderItem={renderItem}
-        keyExtractor={(_, idx) => String(idx)}
-        contentContainerStyle={styles.movimentoContainer}
-        showsVerticalScrollIndicator={false}
-      />
+        <Text style={[styles.saldoInfo, { marginTop: 24 }]}>
+          Saldo pendente de Aprovação
+        </Text>
+        <Text style={styles.saldoPendente}>
+          R$ {saldoPendente.toFixed(2).replace(".", ",")}
+        </Text>
 
-      {/* Botões */}
-      <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Extrato")}>
-          <Text style={styles.buttonText}>Ver Histórico</Text>
+        <Text style={styles.semLancamentos}>Sem lançamentos ainda</Text>
+
+        {/* Botão Gerar QRCode */}
+        <TouchableOpacity
+          style={styles.qrButton}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("RegisterAluno")}
+        >
+          <Text style={styles.qrButtonText}>Gerar QRCode</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Profile")}>
-          <Text style={styles.buttonText}>Ver Perfil</Text>
+
+        <Text style={styles.obsText}>
+          Finalize um cadastro para gerar o QR Code.
+        </Text>
+      </View>
+
+      {/* Barra de menu inferior */}
+      <View style={styles.tabBar}>
+        {/* Saldo (ativo) */}
+        <TouchableOpacity
+          style={styles.tabItem}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("Saldo")}
+        >
+          <Ionicons name="home" size={28} color="#12B24E" />
+          <Text style={[styles.tabLabel, styles.tabLabelActive]}>Saldo</Text>
+        </TouchableOpacity>
+
+        {/* Cadastrar -> RegisterWasteScreen */}
+        <TouchableOpacity
+          style={styles.tabItem}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("RegisterWaste")}
+        >
+          <Ionicons name="leaf" size={28} color="#9e9e9e" />
+          <Text style={styles.tabLabel}>Cadastrar</Text>
+        </TouchableOpacity>
+
+        {/* Históricos */}
+        <TouchableOpacity
+          style={styles.tabItem}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("Extrato")}
+        >
+          <Ionicons name="time-outline" size={28} color="#9e9e9e" />
+          <Text style={styles.tabLabel}>Históricos</Text>
+        </TouchableOpacity>
+
+        {/* Resgatar */}
+        <TouchableOpacity
+          style={styles.tabItem}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("ConfirmWaste")}
+        >
+          <Ionicons name="card-outline" size={28} color="#9e9e9e" />
+          <Text style={styles.tabLabel}>Resgatar</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
 
+const GREEN_BACKGROUND = "#12B24E";
+const WHITE = "#FFFFFF";
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#276846",
+    backgroundColor: GREEN_BACKGROUND,
   },
+
+  /* Header */
   header: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 16,
     paddingTop: 38,
-    paddingBottom: 12,
+    paddingHorizontal: 20,
   },
-  backButton: {
-    marginRight: 5,
-    padding: 3,
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  menuButton: {
-    marginLeft: "auto",
-    padding: 3,
+  headerLogoWrapper: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: "#0C7F38",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
   },
-  logo: {
-    width: 36,
-    height: 36,
-    borderRadius: 8,
-    backgroundColor: "#fff",
-    marginLeft: 6,
-    marginRight: 3,
+  headerLogo: {
+    width: 28,
+    height: 28,
+  },
+  headerTextWrapper: {
+    justifyContent: "center",
   },
   headerTitle: {
-    color: "#fff",
-    fontSize: 18,
+    color: WHITE,
+    fontSize: 20,
     fontWeight: "700",
-    letterSpacing: 0.2,
   },
   headerSubtitle: {
-    color: "#bbd9c6",
-    fontSize: 13,
-    marginTop: 1,
-    fontWeight: "500",
-    letterSpacing: 0.1,
+    color: WHITE,
+    fontSize: 16,
+    marginTop: 2,
+  },
+  profileButton: {
+    marginLeft: "auto",
+  },
+  profileCircle: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    borderWidth: 3,
+    borderColor: WHITE,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  /* Conteúdo central */
+  content: {
+    flex: 1,
+    alignItems: "center",
+    marginTop: 80,
+    paddingHorizontal: 24,
   },
   saldoInfo: {
-    color: "#fff",
+    color: WHITE,
+    fontSize: 18,
     textAlign: "center",
-    marginTop: 22,
-    fontSize: 16,
-    fontWeight: "500",
-    opacity: 0.94,
-    marginBottom: 4,
   },
   saldoResgate: {
-    color: "#fff",
-    fontSize: 52,
+    color: WHITE,
+    fontSize: 64,
     fontWeight: "bold",
-    letterSpacing: 1.5,
-    marginBottom: 11,
+    marginTop: 14,
+    letterSpacing: 2,
     textAlign: "center",
   },
   saldoPendente: {
-    color: "#fff",
-    fontSize: 34,
+    color: WHITE,
+    fontSize: 32,
     fontWeight: "bold",
-    letterSpacing: 1.5,
-    marginBottom: 16,
+    marginTop: 8,
     textAlign: "center",
   },
-  movimentoContainer: {
-    flexGrow: 0,
-    marginHorizontal: 36,
-    marginBottom: 31,
-  },
-  movimentoRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "transparent",
-    marginTop: 7,
-    marginBottom: 7,
-    minHeight: 34,
-  },
-  movimentoTexto: {
-    color: "#fff",
-    fontSize: 17,
-    fontWeight: "500",
-    marginRight: 16,
-  },
-  movimentoData: {
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: "400",
-  },
-  buttonRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 21,
-    marginTop: 19,
-    gap: 18,
-  },
-  button: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    paddingVertical: 11,
-    paddingHorizontal: 32,
-    marginHorizontal: 8,
-    minWidth: 128,
-    elevation: 3,
-  },
-  buttonText: {
-    color: "#276846",
-    fontWeight: "bold",
+  semLancamentos: {
+    color: WHITE,
     fontSize: 16,
+    marginTop: 20,
     textAlign: "center",
-    letterSpacing: 0.2,
+  },
+
+  /* Botão Gerar QRCode */
+  qrButton: {
+    marginTop: 40,
+    backgroundColor: WHITE,
+    borderRadius: 18,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    alignSelf: "stretch",
+    marginHorizontal: 24,
+  },
+  qrButtonText: {
+    color: GREEN_BACKGROUND,
+    fontSize: 20,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  obsText: {
+    color: WHITE,
+    fontSize: 15,
+    textAlign: "center",
+    marginTop: 18,
+  },
+
+  /* Barra de menu inferior */
+  tabBar: {
+    flexDirection: "row",
+    backgroundColor: WHITE,
+    paddingTop: 6,
+    paddingBottom: 10,
+    borderTopWidth: 1,
+    borderTopColor: "#e0e0e0",
+    justifyContent: "space-around",
+  },
+  tabItem: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tabLabel: {
+    marginTop: 3,
+    fontSize: 12,
+    color: "#9e9e9e",
+  },
+  tabLabelActive: {
+    color: "#12B24E",
+    fontWeight: "600",
   },
 });
