@@ -6,394 +6,340 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-  Modal,
-  ScrollView,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Picker } from '@react-native-picker/picker';
 
-const materialGroups = [
-  {
-    type: 'Plastico',
-    options: [
-      'PEAD Branco',
-      'PEAD Colorido',
-      'PET Azul',
-      'PET Incolor',
-      'PET Misturada',
-      'PET Verde',
-      'PET Óleo',
-      'PP Colorido',
-      'PEBD Colorido',
-      'PEBD Incolor',
-      'PVC',
-      'PP Branco',
-    ],
-  },
-  {
-    type: 'Papel',
-    options: ['Papel Misto', 'Ondulado 1', 'Caixaria', 'Longa Vida (Tetrapak)'],
-  },
-  {
-    type: 'Vidro',
-    options: ['Vidro temperado', 'Vidro comum', 'Vidro laminado', 'Vidro Misto'],
-  },
-  {
-    type: 'Metal',
-    options: ['Alumínio Latinha', 'Ferro Sucata', 'Aço Inox'],
-  },
-  {
-    type: 'Orgânico',
-    options: ['Orgânico'],
-  },
-];
+const materialTabs = ['Plastico', 'Papel', 'Vidro', 'Metal', 'Organico'];
 
-const pickerValues: Record<string, number> = {
-  'PEAD Branco': 2.5,
-  'PEAD Colorido': 2.5,
-  'PET Azul': 2.5,
-  'PET Incolor': 2.5,
-  'PET Misturada': 1.5,
-  'PET Verde': 2.5,
-  'PET Óleo': 0.5,
-  'PP Colorido': 2.5,
-  'PEBD Colorido': 0.3,
-  'PEBD Incolor': 1.2,
-  PVC: 0.5,
-  'PP Branco': 1,
-  'Papel Misto': 0.07,
-  'Ondulado 1': 0.25,
-  Caixaria: 2,
-  'Longa Vida (Tetrapak)': 0.1,
-  'Vidro temperado': 0,
-  'Vidro comum': 0,
-  'Vidro laminado': 0,
-  'Vidro Misto': 0.05,
-  'Alumínio Latinha': 4,
-  'Ferro Sucata': 0.7,
-  'Aço Inox': 1.1,
-  Orgânico: 0,
-};
-
-const menuOptions = [
-  { label: 'Menu Principal' },
-  { label: 'Cadastrar Resíduo' },
-  { label: 'Extrato' },
-  { label: 'Perfil' },
-  { label: 'Instagram' },
-];
-
-const RegisterWasteScreen: React.FC = () => {
-  const [selectedTypeIndex, setSelectedTypeIndex] = useState(0);
-  const [selectedSubtype, setSelectedSubtype] = useState(materialGroups[0].options[0]);
-  const [weight, setWeight] = useState('2');
-  const [menuVisible, setMenuVisible] = useState(false);
+const RegisterWasteScreen: React.FC = ({ navigation }: any) => {
+  const [selectedTab, setSelectedTab] = useState('Plastico');
+  const [unidade, setUnidade] = useState('2.0');
 
   const logo = require('../../assets/logo.png');
 
-  const handleTypeSelect = (index: number) => {
-    setSelectedTypeIndex(index);
-    setSelectedSubtype(materialGroups[index].options[0]);
-  };
-
   return (
     <View style={styles.container}>
-      {/* Header */}
+      {/* Header igual ao saldo */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => {}}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-
-        <Image source={logo} style={styles.smallLogo} />
-        <View style={{ marginLeft: 8 }}>
-          <Text style={styles.headerTitle}>Planeta Verde</Text>
-          <Text style={styles.headerSubtitle}>Cadastrar de Resíduos</Text>
-        </View>
-        <TouchableOpacity style={styles.menuButton} onPress={() => setMenuVisible(true)}>
-          <Ionicons name="menu" size={28} color="#fff" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Barra de seleção dos tipos */}
-      <View style={styles.filterRow}>
-        <TouchableOpacity
-          style={styles.arrowButton}
-          disabled={selectedTypeIndex === 0}
-          onPress={() => handleTypeSelect(Math.max(0, selectedTypeIndex - 1))}
-        >
-          <Ionicons name="chevron-back" size={20} color="#fff" />
-        </TouchableOpacity>
-        {materialGroups.map((group, index) => (
-          <TouchableOpacity
-            key={group.type}
-            style={[
-              styles.filterButton,
-              selectedTypeIndex === index && styles.filterButtonSelected,
-            ]}
-            onPress={() => handleTypeSelect(index)}
-          >
-            <Text
-              style={[
-                styles.filterText,
-                selectedTypeIndex === index && styles.filterTextSelected,
-              ]}
-            >
-              {group.type}
-            </Text>
-          </TouchableOpacity>
-        ))}
-        <TouchableOpacity
-          style={styles.arrowButton}
-          disabled={selectedTypeIndex === materialGroups.length - 1}
-          onPress={() => handleTypeSelect(Math.min(materialGroups.length - 1, selectedTypeIndex + 1))}
-        >
-          <Ionicons name="chevron-forward" size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Formulário */}
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View style={{ width: '100%', marginTop: 12 }}>
-          <Text style={styles.label}>Tipo de Resíduo</Text>
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={selectedSubtype}
-              style={styles.picker}
-              onValueChange={(itemValue) => setSelectedSubtype(itemValue)}
-              dropdownIconColor="#316241"
-            >
-              {materialGroups[selectedTypeIndex].options.map((option) => (
-                <Picker.Item label={option} value={option} key={option} />
-              ))}
-            </Picker>
+        <View style={styles.headerLeft}>
+          <View style={styles.headerLogoWrapper}>
+            <Image
+              source={logo}
+              style={styles.headerLogo}
+              resizeMode="contain"
+            />
           </View>
-          {pickerValues[selectedSubtype] !== undefined && (
-            <Text style={styles.priceLabel}>
-              {`Preço: R$ ${pickerValues[selectedSubtype].toFixed(2)} /kg`}
-            </Text>
-          )}
-
-          <Text style={styles.label}>Peso (Kg)</Text>
-          <TextInput
-            style={styles.input}
-            value={weight}
-            onChangeText={setWeight}
-            keyboardType="decimal-pad"
-          />
-
-          <TouchableOpacity style={styles.photoButton}>
-            <Ionicons name="camera-outline" size={24} color="#316241" style={{ marginRight: 8 }} />
-            <Text style={styles.photoButtonText}>Tirar Foto</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.mainButton}>
-            <Text style={styles.mainButtonText}>Cadastrar Resíduo</Text>
-          </TouchableOpacity>
+          <View style={styles.headerTextWrapper}>
+            <Text style={styles.headerTitle}>Planeta Verde</Text>
+            <Text style={styles.headerSubtitle}>Cadastrar Residuos</Text>
+          </View>
         </View>
-      </ScrollView>
 
-      {/* Menu lateral modal */}
-      <Modal
-        transparent
-        animationType="slide"
-        visible={menuVisible}
-        onRequestClose={() => setMenuVisible(false)}
-      >
-        <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={() => setMenuVisible(false)}>
-          <View style={styles.sideMenu}>
-            <Text style={styles.menuTitle}>Menu</Text>
-            {menuOptions.map((option) => (
+        <TouchableOpacity style={styles.profileButton} onPress={() => {}}>
+          <View style={styles.profileCircle}>
+            <Ionicons name="person" size={24} color="#fff" />
+          </View>
+        </TouchableOpacity>
+      </View>
+
+      {/* Conteúdo fixo (sem scroll) */}
+      <View style={styles.content}>
+        {/* Tabs de material */}
+        <View style={styles.tabsRow}>
+          {materialTabs.map((tab) => {
+            const isActive = tab === selectedTab;
+            return (
               <TouchableOpacity
-                key={option.label}
-                style={styles.menuItem}
-                onPress={() => {
-                  // ação futura para navegação
-                  setMenuVisible(false);
-                }}
+                key={tab}
+                style={[styles.tabItem, isActive && styles.tabItemActive]}
+                onPress={() => setSelectedTab(tab)}
               >
-                <Text style={styles.menuItemText}>{option.label}</Text>
+                <Text
+                  style={[styles.tabText, isActive && styles.tabTextActive]}
+                >
+                  {tab}
+                </Text>
               </TouchableOpacity>
-            ))}
+            );
+          })}
+        </View>
+
+        {/* Campo Unidade (Un) */}
+        <View style={styles.fieldBlock}>
+          <Text style={styles.label}>Unidade(Un)</Text>
+          <View style={styles.inputBigWrapper}>
+            <TextInput
+              style={styles.inputBig}
+              value={unidade}
+              onChangeText={setUnidade}
+              keyboardType="decimal-pad"
+              placeholder="2.0"
+              placeholderTextColor="#C7C7CD"
+            />
           </View>
+        </View>
+
+        {/* Botão Tirar foto */}
+        <TouchableOpacity style={styles.photoButton} activeOpacity={0.8}>
+          <Ionicons
+            name="camera-outline"
+            size={22}
+            color="#ffffff"
+            style={{ marginRight: 8 }}
+          />
+          <Text style={styles.photoButtonText}>Tirar foto</Text>
         </TouchableOpacity>
-      </Modal>
+
+        {/* Texto de itens adicionados */}
+        <View style={styles.itensInfo}>
+          <Text style={styles.itensTitle}>Itens adicionados 0/10</Text>
+          <Text style={styles.itensSubtitle}>
+            Nenhum item na lista. Adicione itens e depois finalize o cadastro.
+          </Text>
+        </View>
+
+        {/* Botões grandes */}
+        <TouchableOpacity style={styles.mainButton} activeOpacity={0.8}>
+          <Text style={styles.mainButtonText}>Adicionar item à lista</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.mainButton} activeOpacity={0.8}>
+          <Text style={styles.mainButtonText}>Cadastrar lista</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Barra de menu inferior */}
+      <View style={styles.tabBar}>
+        {/* Saldo */}
+        <TouchableOpacity
+          style={styles.bottomTabItem}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('Saldo')}
+        >
+          <Ionicons name="home" size={26} color="#9e9e9e" />
+          <Text style={styles.bottomTabLabel}>Saldo</Text>
+        </TouchableOpacity>
+
+        {/* Cadastrar (ativo) */}
+        <TouchableOpacity
+          style={styles.bottomTabItem}
+          activeOpacity={0.8}
+          onPress={() => {}}
+        >
+          <Ionicons name="leaf" size={26} color="#12B24E" />
+          <Text style={[styles.bottomTabLabel, styles.bottomTabLabelActive]}>
+            Cadastrar
+          </Text>
+        </TouchableOpacity>
+
+        {/* Históricos */}
+        <TouchableOpacity
+          style={styles.bottomTabItem}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('Extrato')}
+        >
+          <Ionicons name="time-outline" size={26} color="#9e9e9e" />
+          <Text style={styles.bottomTabLabel}>Históricos</Text>
+        </TouchableOpacity>
+
+        {/* Resgatar */}
+        <TouchableOpacity
+          style={styles.bottomTabItem}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('ConfirmWaste')}
+        >
+          <Ionicons name="card-outline" size={26} color="#9e9e9e" />
+          <Text style={styles.bottomTabLabel}>Resgatar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
-const COLOR_BG = '#316241';
-const COLOR_BTN = '#fff';
-const COLOR_BTN_TEXT = '#316241';
-const COLOR_TITLE = '#fff';
-const COLOR_SUBTITLE = '#d6eedb';
+const GREEN_BACKGROUND = '#12B24E';
+const GREEN_DARK = '#0C7F38';
+const WHITE = '#FFFFFF';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLOR_BG,
-    paddingTop: 48,
+    backgroundColor: GREEN_BACKGROUND,
+  },
+
+  /* Header */
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 32,
     paddingHorizontal: 20,
   },
-  header: {
-    width: '100%',
+  headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 14,
   },
-  backButton: {
-    paddingRight: 8,
-    paddingVertical: 4,
+  headerLogoWrapper: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: GREEN_DARK,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
   },
-  smallLogo: {
+  headerLogo: {
     width: 28,
     height: 28,
-    borderRadius: 6,
-    marginLeft: 2,
+  },
+  headerTextWrapper: {
+    justifyContent: 'center',
   },
   headerTitle: {
-    color: COLOR_TITLE,
-    fontSize: 16,
-    fontWeight: '600',
+    color: WHITE,
+    fontSize: 18,
+    fontWeight: '700',
   },
   headerSubtitle: {
-    color: COLOR_SUBTITLE,
-    fontSize: 13,
+    color: WHITE,
+    fontSize: 15,
     marginTop: 2,
   },
-  menuButton: {
+  profileButton: {
     marginLeft: 'auto',
-    marginRight: 0,
-    padding: 8,
   },
-  filterRow: {
-    flexDirection: 'row',
+  profileCircle: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    borderWidth: 3,
+    borderColor: WHITE,
+    justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: 14,
-    paddingHorizontal: 6,
-    marginBottom: 32,
-    marginTop: 4,
   },
-  arrowButton: {
-    padding: 2,
+
+  /* Conteúdo */
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 16,
   },
-  filterButton: {
-    paddingVertical: 7,
-    paddingHorizontal: 16,
-    marginHorizontal: 3,
-    borderRadius: 8,
+
+  /* Tabs */
+  tabsRow: {
+    flexDirection: 'row',
+    marginBottom: 14,
+  },
+  tabItem: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    marginRight: 8,
     backgroundColor: 'transparent',
   },
-  filterButtonSelected: {
-    backgroundColor: '#fff',
+  tabItemActive: {
+    backgroundColor: WHITE,
   },
-  filterText: {
-    color: '#fff',
+  tabText: {
+    color: WHITE,
     fontSize: 15,
     fontWeight: '600',
   },
-  filterTextSelected: {
-    color: '#316241',
-    fontWeight: 'bold',
+  tabTextActive: {
+    color: GREEN_BACKGROUND,
+    fontWeight: '700',
   },
-  contentContainer: {
-    alignItems: 'center',
-    paddingBottom: 48,
+
+  /* Campo Unidade */
+  fieldBlock: {
+    marginBottom: 14,
   },
   label: {
-    color: COLOR_TITLE,
+    color: WHITE,
+    fontSize: 16,
     fontWeight: '600',
-    marginBottom: 8,
-    marginLeft: 3,
-    fontSize: 16,
-    marginTop: 8,
+    marginBottom: 6,
   },
-  pickerContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    marginBottom: 10,
-    elevation: 4,
-    width: '100%',
+  inputBigWrapper: {
+    backgroundColor: '#E8F6EA',
+    borderRadius: 10,
+    height: 80,
+    justifyContent: 'center',
+    paddingHorizontal: 16,
   },
-  picker: {
-    height: 50,
-    width: '100%',
-    color: '#316241',
+  inputBig: {
+    fontSize: 24,
+    color: '#4d4d4d',
   },
-  priceLabel: {
-    color: '#316241',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginVertical: 10,
-    textAlign: 'center',
-  },
-  input: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    fontSize: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 20,
-  },
+
+  /* Botão tirar foto */
   photoButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLOR_BTN,
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 36,
     alignSelf: 'center',
-    marginBottom: 22,
-    elevation: 2,
-    marginTop: 8,
+    backgroundColor: GREEN_DARK,
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    marginTop: 6,
+    marginBottom: 18,
   },
   photoButtonText: {
-    color: COLOR_BTN_TEXT,
+    color: WHITE,
     fontSize: 16,
     fontWeight: '600',
   },
+
+  /* Itens adicionados */
+  itensInfo: {
+    marginBottom: 16,
+  },
+  itensTitle: {
+    color: WHITE,
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  itensSubtitle: {
+    color: WHITE,
+    fontSize: 14,
+  },
+
+  /* Botões principais */
   mainButton: {
-    backgroundColor: COLOR_BTN,
-    borderRadius: 8,
+    backgroundColor: WHITE,
+    borderRadius: 18,
     paddingVertical: 14,
-    alignItems: 'center',
-    width: '88%',
-    elevation: 2,
+    paddingHorizontal: 24,
+    marginBottom: 10,
   },
   mainButtonText: {
-    color: COLOR_BTN_TEXT,
+    color: GREEN_BACKGROUND,
     fontSize: 16,
     fontWeight: '600',
+    textAlign: 'center',
   },
-  overlay: {
-    flex: 1,
-    backgroundColor: '#0008',
-    justifyContent: 'flex-start',
+
+  /* Barra de menu inferior */
+  tabBar: {
+    flexDirection: 'row',
+    backgroundColor: WHITE,
+    paddingTop: 6,
+    paddingBottom: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+    justifyContent: 'space-around',
   },
-  sideMenu: {
-    backgroundColor: COLOR_BG,
-    width: 220,
-    paddingVertical: 24,
-    paddingHorizontal: 16,
-    borderTopRightRadius: 18,
-    borderBottomRightRadius: 18,
+  bottomTabItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  menuTitle: {
-    fontWeight: 'bold',
-    color: COLOR_TITLE,
-    fontSize: 18,
-    marginBottom: 16,
-    marginLeft: 8,
+  bottomTabLabel: {
+    marginTop: 3,
+    fontSize: 12,
+    color: '#9e9e9e',
   },
-  menuItem: {
-    paddingVertical: 11,
-    paddingLeft: 8,
-  },
-  menuItemText: {
-    fontSize: 16,
-    color: COLOR_TITLE,
-    fontWeight: '500',
+  bottomTabLabelActive: {
+    color: '#12B24E',
+    fontWeight: '600',
   },
 });
 

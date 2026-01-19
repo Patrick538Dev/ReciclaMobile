@@ -1,184 +1,275 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const EditProfileScreen: React.FC = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [bio, setBio] = useState('');
+const EditProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const [nome, setNome] = useState('Patrick De Sousa Ferreira');
+  const [email, setEmail] = useState('sousapatrick538@gmail.com');
+  const [cpf, setCpf] = useState('068.224.401-51');
+  const [instagram, setInstagram] = useState('');
+  const [matricula, setMatricula] = useState('84783');
+  const [escola, setEscola] = useState('Olimpo');
 
-  const avatar = require('../../assets/avatar-placeholder.png'); // Ajuste o caminho
+  const logo = require('../../assets/logo.png');
+
+  const handleSave = () => {
+    // TODO: salvar dados se precisar
+    navigation.navigate('Profile'); // volta para ProfileScreen
+  };
 
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => { /* ação voltar */ }}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
+      <View style={styles.headerTop}>
+        <TouchableOpacity
+          style={styles.backRow}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={22} color="#fff" />
+          <Text style={styles.backText}>Perfil</Text>
         </TouchableOpacity>
-        <Image source={require('../../assets/logo.png')} style={styles.smallLogo} />
-        <View style={{ marginLeft: 8 }}>
-          <Text style={styles.headerTitle}>Recicla Fácil</Text>
-          <Text style={styles.headerSubtitle}>Editar Perfil</Text>
+      </View>
+
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <View style={styles.headerLogoWrapper}>
+            <Image
+              source={logo}
+              style={styles.headerLogo}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={styles.headerTextWrapper}>
+            <Text style={styles.headerTitle}>Planeta Verde</Text>
+            <Text style={styles.headerSubtitle}>Meus Dados</Text>
+          </View>
         </View>
-        <View style={{ width: 30 }} />
+
+        <View style={styles.headerAvatarCircle}>
+          <Ionicons name="person" size={22} color="#fff" />
+        </View>
       </View>
 
-      {/* Espaço header/avatar */}
-      <View style={{ height: 20 }} />
+      {/* Conteúdo fixo */}
+      <View style={styles.content}>
+        {/* Avatar + Alterar foto */}
+        <View style={styles.avatarWrapper}>
+          <View style={styles.avatarCircleOuter}>
+            <View style={styles.avatarCircleInner}>
+              <Ionicons name="person" size={32} color="#12B24E" />
+            </View>
+          </View>
+          <TouchableOpacity style={styles.changePhotoButton}>
+            <Text style={styles.changePhotoText}>Alterar foto</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* Avatar */}
-      <View style={styles.avatarContainer}>
-        <Image source={avatar} style={styles.avatar} />
+        {/* Formulário */}
+        <View style={styles.form}>
+          <Text style={styles.label}>Nome</Text>
+          <TextInput
+            style={styles.input}
+            value={nome}
+            onChangeText={setNome}
+          />
+
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
+
+          <Text style={styles.label}>CPF</Text>
+          <TextInput
+            style={styles.input}
+            value={cpf}
+            onChangeText={setCpf}
+            keyboardType="numeric"
+          />
+
+          <Text style={styles.label}>Instagram</Text>
+          <TextInput
+            style={styles.input}
+            value={instagram}
+            onChangeText={setInstagram}
+            placeholder="@usuario"
+            placeholderTextColor="#C7C7CD"
+          />
+
+          <Text style={styles.label}>Matrícula</Text>
+          <TextInput
+            style={styles.input}
+            value={matricula}
+            onChangeText={setMatricula}
+            keyboardType="numeric"
+          />
+
+          <Text style={styles.label}>Escola</Text>
+          <TextInput
+            style={styles.input}
+            value={escola}
+            onChangeText={setEscola}
+            placeholder="Olimpo ⌄"
+            placeholderTextColor="#C7C7CD"
+          />
+        </View>
+
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          <Text style={styles.saveButtonText}>Salvar</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.changePhotoButton}>
-        <Text style={styles.changePhotoText}>Alterar foto</Text>
-      </TouchableOpacity>
-
-      {/* Formulário */}
-      <View style={styles.form}>
-        <Text style={styles.label}>Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Nome de usuário"
-          placeholderTextColor="#b2b2b2"
-          value={name}
-          onChangeText={setName}
-        />
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="usuario@email.com.br"
-          placeholderTextColor="#b2b2b2"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <Text style={styles.label}>Telefone</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="(61)9999-9999"
-          placeholderTextColor="#b2b2b2"
-          keyboardType="phone-pad"
-          value={telefone}
-          onChangeText={setTelefone}
-        />
-        <Text style={styles.label}>Bio</Text>
-        <TextInput
-          style={[styles.input, styles.bioInput]}
-          placeholder="Apaixonado por reciclagem"
-          placeholderTextColor="#b2b2b2"
-          value={bio}
-          onChangeText={setBio}
-          multiline
-        />
-      </View>
-
-      <TouchableOpacity style={styles.saveButton}>
-        <Text style={styles.saveButtonText}>Salvar</Text>
-      </TouchableOpacity>
     </View>
   );
 };
 
-const COLOR_BG = '#316241';
-const COLOR_BTN = '#fff';
-const COLOR_BTN_TEXT = '#316241';
-const COLOR_TITLE = '#fff';
-const COLOR_SUBTITLE = '#d6eedb';
+const GREEN_BACKGROUND = '#12B24E';
+const GREEN_DARK = '#0C7F38';
+const WHITE = '#FFFFFF';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLOR_BG,
-    alignItems: 'center',
-    paddingTop: 48,
+    backgroundColor: GREEN_BACKGROUND,
+  },
+
+  headerTop: {
+    paddingTop: 28,
     paddingHorizontal: 20,
   },
-  header: {
-    width: '100%',
+  backRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
   },
-  backButton: {
-    paddingRight: 10,
-    paddingVertical: 4,
+  backText: {
+    color: WHITE,
+    fontSize: 18,
+    marginLeft: 6,
   },
-  smallLogo: {
-    width: 28,
-    height: 28,
-    borderRadius: 6,
-    marginLeft: 2,
+
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginTop: 10,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerLogoWrapper: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    backgroundColor: GREEN_DARK,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  headerLogo: {
+    width: 24,
+    height: 24,
+  },
+  headerTextWrapper: {
+    justifyContent: 'center',
   },
   headerTitle: {
-    color: COLOR_TITLE,
-    fontSize: 16,
-    fontWeight: '600',
+    color: WHITE,
+    fontSize: 18,
+    fontWeight: '700',
   },
   headerSubtitle: {
-    color: COLOR_SUBTITLE,
-    fontSize: 13,
+    color: WHITE,
+    fontSize: 14,
     marginTop: 2,
   },
-  avatarContainer: {
-    alignItems: 'center',
+  headerAvatarCircle: {
+    marginLeft: 'auto',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 3,
+    borderColor: WHITE,
     justifyContent: 'center',
-    marginBottom: 6,
+    alignItems: 'center',
   },
-  avatar: {
+
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+  },
+
+  avatarWrapper: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  avatarCircleOuter: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    borderWidth: 5,
+    borderColor: WHITE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  avatarCircleInner: {
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: '#e9e9e9',
+    backgroundColor: WHITE,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   changePhotoButton: {
     borderWidth: 1,
-    borderColor: '#364c39',
-    borderRadius: 8,
-    paddingVertical: 7,
-    paddingHorizontal: 32,
-    alignSelf: 'center',
-    marginBottom: 18,
+    borderColor: WHITE,
+    borderRadius: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 26,
   },
   changePhotoText: {
-    color: '#364c39',
+    color: WHITE,
     fontSize: 16,
   },
+
   form: {
-    width: '100%',
-    marginBottom: 15,
+    flex: 1,
   },
   label: {
-    color: COLOR_TITLE,
-    fontWeight: '500',
-    marginTop: 10,
-    marginBottom: 2,
+    color: WHITE,
+    fontSize: 14,
+    marginBottom: 4,
+    marginTop: 6,
   },
   input: {
-    backgroundColor: '#fff',
-    borderRadius: 7,
+    backgroundColor: WHITE,
+    borderRadius: 10,
     paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 15,
-    marginBottom: 8,
+    paddingVertical: 8,
+    fontSize: 14,
   },
-  bioInput: {
-    height: 56,
-    textAlignVertical: 'top',
-  },
+
   saveButton: {
-    width: '100%',
-    backgroundColor: COLOR_BTN,
-    borderRadius: 8,
+    backgroundColor: WHITE,
+    borderRadius: 16,
     paddingVertical: 12,
     alignItems: 'center',
-    marginTop: 14,
+    marginTop: 10,
+    marginBottom: 10,
   },
   saveButtonText: {
-    color: COLOR_BTN_TEXT,
-    fontSize: 16,
+    color: GREEN_BACKGROUND,
+    fontSize: 18,
     fontWeight: '600',
   },
 });
